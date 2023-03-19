@@ -35,7 +35,7 @@ class Grade(db.Model):
     __tablename__ = 'grades'
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
+    course_id = db.Column(db.String(20), db.ForeignKey('course.id'))
     score = db.Column(db.Float, nullable=False)
     credit = db.Column(db.Integer, default=0)
 
@@ -54,11 +54,13 @@ class Grade(db.Model):
 class Registration(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    course_id = db.Column(db.String(10), db.ForeignKey('course.id'), nullable=False)
     grade = db.Column(db.Float, nullable=True, default=0.0)
 
-    def __repr__(self):
-        return f'<Registration {self.id}: Student {self.student_id} - Course {self.course_id}>'
+    def __init__(self, student_id, course_id, grade):
+        self.student_id = student_id
+        self.course_id = course_id
+        self.grade = grade
 
     def save(self):
         db.session.add(self)

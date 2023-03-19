@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource, fields
+from flask_restx import Namespace, Resource, fields, reqparse
 from ..models.management import Registration
 from ..utils import db
 
@@ -34,18 +34,21 @@ class RegistrationList(Resource):
 @registration_namespace.route('/course/<int:course_id>')
 class RegistrationByCourse(Resource):
     @registration_namespace.marshal_list_with(registration_model)
-    def get(self, course_id):
+    def get(self, course_id):  # add course_id as a parameter
         """
-            retrieve all courses
-        :param course_id:
+            retrieve all registrations
         :return:
         """
+        parser = reqparse.RequestParser()
+        parser.add_argument('course_id', type=str, required=False, help='Course ID cannot be blank')
+        args = parser.parse_args()
+
         registrations = Registration.query.filter_by(course_id=course_id).all()
         return registrations
 
 
-@registration_namespace.route('registration/<int:id>')
-class Registration(Resource):
+@registration_namespace.route('/registration/<int:id>')
+class RetrieveRegistrations(Resource):
     @registration_namespace.marshal_with(registration_model)
     def get(self, id):
         """

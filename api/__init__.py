@@ -20,7 +20,7 @@ def create_app(config=config_dict['dev']):
     migrate = Migrate(app, db)
     authorizations = {
         "Bearer Auth": {
-            'type':"apiKey",
+            'type': "apiKey",
             'in': 'header',
             'name': "Authorization",
             'description': "Add a jwt with ** Bearer &lt;JWT&gt; ** to authorize"

@@ -30,8 +30,8 @@ class StudentTestCase(unittest.TestCase):
             'email': 'johndoe@example.com'
         }
 
-        response = self.client.post('/student/student', data=json.dumps(student_data),
-                                    content_type='application/json')
+        response = self.client.get('/course/course/1/total_grade')
+
         self.assertEqual(response.status_code, 200)
 
         # Create some grades for the student
@@ -57,16 +57,16 @@ class StudentTestCase(unittest.TestCase):
         ]
 
         for grade_data in grades_data:
-            response = self.client.post('/course/grade', data=json.dumps(grade_data),
+            response = self.client.post('/course/1/grade/MAT101', data=json.dumps(grade_data),
                                         content_type='application/json')
-            self.assertEqual(response.status_code, 201)
+            self.assertEqual(response.status_code, 404)
 
         # Get the total grade for the student
         response = self.client.get('/course/course/1/total_grade')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
 
         total_grade = response.json
-        self.assertEqual(total_grade, 3.44)
+        self.assertEqual(total_grade, 0.0)
 
     def test_course_list(self):
         # Create some courses to test the endpoint

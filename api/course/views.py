@@ -100,8 +100,8 @@ def put(self):
     return course
 
 
-@course_namespace.route('/<int:student_id>/grade/<int:course_id>')
-class Grade(Resource):
+@course_namespace.route('/<int:student_id>/grade/<string:course_id>')
+class CalculateGrade(Resource):
     @course_namespace.expect(grade_model)
     @course_namespace.response(201, 'Grade successfully created.')
     @course_namespace.doc(
